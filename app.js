@@ -5,8 +5,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 var indexRouter = require('./routes/index');
+const fs = require("fs");
+const {createServer} = require("node:https");
 
 var app = express();
+
+var privateKey = fs.readFileSync( 'certificates/privkey.pem' );
+var certificate = fs.readFileSync( 'certificates/fullchain.pem' );
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,5 +44,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+createServer({
+  key: privateKey,
+  cert: certificate
+}, app).listen(3000);
 
 module.exports = app;
