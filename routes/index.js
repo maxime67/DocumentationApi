@@ -8,12 +8,12 @@ const dbName = 'documentation';
 
 
 // Middleware to validate MongoDB connection string
-const validateMongoUri = (req, res, next) => {
-  if (!mongoUri || typeof mongoUri !== 'string') {
-    return res.status(500).json({ error: 'Invalid MongoDB connection configuration' });
-  }
-  next();
-}
+// const validateMongoUri = (req, res, next) => {
+//   if (!mongoUri || typeof mongoUri !== 'string') {
+//     return res.status(500).json({ error: 'Invalid MongoDB connection configuration' });
+//   }
+//   next();
+// }
 
 // Reusable MongoDB connection function
 async function getMongoClient() {
@@ -29,7 +29,7 @@ async function getMongoClient() {
 }
 
 // Get all documents
-router.get('/', validateMongoUri, async (req, res) => {
+router.get('/', async (req, res) => {
   let client;
   try {
     client = await getMongoClient();
@@ -51,7 +51,7 @@ router.get('/', validateMongoUri, async (req, res) => {
 });
 
 // Get documents by status (published/draft/etc)
-router.get('/status/:status', validateMongoUri, async (req, res) => {
+router.get('/status/:status', async (req, res) => {
   let client;
   try {
     const { status } = req.params;
@@ -82,7 +82,7 @@ router.get('/status/:status', validateMongoUri, async (req, res) => {
 });
 
 // Get documents by category
-router.get('/category/:category', validateMongoUri, async (req, res) => {
+router.get('/category/:category',async (req, res) => {
   let client;
   try {
     const { category } = req.params;
@@ -112,7 +112,7 @@ router.get('/category/:category', validateMongoUri, async (req, res) => {
 });
 
 // Get document by ID
-router.get('/:id', validateMongoUri, async (req, res) => {
+router.get('/:id',  async (req, res) => {
   let client;
   try {
     const { id } = req.params;
