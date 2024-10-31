@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { MongoClient, ObjectId } = require('mongodb');
+require('dotenv').config();
 
 // MongoDB connection configuration
 const mongoUri = process.env.MONGOURL;
