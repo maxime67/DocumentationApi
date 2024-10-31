@@ -10,10 +10,9 @@ const {createServer} = require("node:https");
 
 var app = express();
 
-// var privateKey = fs.readFileSync( 'certificates/privkey.pem' );
-// var certificate = fs.readFileSync( 'certificates/fullchain.pem' );
 var privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pem');
 var certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -45,12 +44,16 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Create HTTPS server
 const httpsServer = createServer({
   key: privateKey,
   cert: certificate
 }, app);
 
+// Start the server
 httpsServer.listen(3001, () => {
   console.log('HTTPS Server running on port 3001');
 });
-module.exports = app;
+
+// Remove this line since we're handling the server creation manually
+// module.exports = app;
