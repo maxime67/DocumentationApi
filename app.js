@@ -51,9 +51,7 @@ const httpsServer = createServer({
 }, app);
 
 // Start the server
-httpsServer.listen(3001, () => {
-  console.log('HTTPS Server running on port 3001');
+httpsServer.listen(3000, () => {
+  console.log('HTTPS Server running on port 3000');
 });
 
-// Remove this line since we're handling the server creation manually
-// module.exports = app;
