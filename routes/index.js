@@ -7,23 +7,23 @@ const mongoUri = process.env.MONGOURL;
 const dbName = 'documentation';
 
 
-// Middleware to validate MongoDB connection string
-// const validateMongoUri = (req, res, next) => {
-//   if (!mongoUri || typeof mongoUri !== 'string') {
-//     return res.status(500).json({ error: 'Invalid MongoDB connection configuration' });
-//   }
-//   next();
-// }
-
 // Reusable MongoDB connection function
 async function getMongoClient() {
   try {
-    const client = await MongoClient.connect(mongoUri, {
+    // Add proper options object and error handling
+    const client = new MongoClient(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      connectTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 5000,
     });
+
+    // Connect explicitly
+    await client.connect();
+    console.log('Successfully connected to MongoDB');
     return client;
   } catch (error) {
+    console.error('MongoDB connection error:', error);
     throw new Error(`MongoDB connection failed: ${error.message}`);
   }
 }

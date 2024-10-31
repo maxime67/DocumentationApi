@@ -14,8 +14,8 @@ var privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pe
 var certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 app.use(cors({
   origin: '*'
