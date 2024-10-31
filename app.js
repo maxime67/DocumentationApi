@@ -12,7 +12,6 @@ var app = express();
 
 // var privateKey = fs.readFileSync( 'certificates/privkey.pem' );
 // var certificate = fs.readFileSync( 'certificates/fullchain.pem' );
-console.log('Certificate path:', path.join(__dirname, 'certificates', 'privkey.pem'));
 var privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pem');
 var certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
 // view engine setup
