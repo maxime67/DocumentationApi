@@ -37,43 +37,12 @@ router.get('/', async (req, res) => {
     const db = client.db(dbName);
 
     const documents = await db.collection('object')
-        .find({})
+        .find({status : "published"})
         .toArray();
 
     res.json(documents);
   } catch (error) {
     console.error('Error fetching all documents:', error);
-    res.status(500).json({ error: `Internal server error: ${error.message}` });
-  } finally {
-    if (client) {
-      await client.close();
-    }
-  }
-});
-
-// Get documents by status (published/draft/etc)
-router.get('/status/:status', async (req, res) => {
-  let client;
-  try {
-    const { status } = req.params;
-
-    // Validate status
-    const validStatuses = ['draft', 'published', 'archived', 'deprecated'];
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({ error: 'Invalid status. Must be one of: draft, published, archived, deprecated' });
-    }
-
-    client = await getMongoClient();
-    const db = client.db(dbName);
-
-    const documents = await db.collection('object')
-        .find({ status: status })
-        .sort({ updatedAt: -1 })
-        .toArray();
-
-    res.json(documents);
-  } catch (error) {
-    console.error('Error fetching documents by status:', error);
     res.status(500).json({ error: `Internal server error: ${error.message}` });
   } finally {
     if (client) {
@@ -104,38 +73,6 @@ router.get('/category/:category',async (req, res) => {
     res.json(documents);
   } catch (error) {
     console.error('Error fetching documents by category:', error);
-    res.status(500).json({ error: `Internal server error: ${error.message}` });
-  } finally {
-    if (client) {
-      await client.close();
-    }
-  }
-});
-
-// Get document by ID
-router.get('/:id',  async (req, res) => {
-  let client;
-  try {
-    const { id } = req.params;
-
-    // Validate ObjectId format
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid document ID format' });
-    }
-
-    client = await getMongoClient();
-    const db = client.db(dbName);
-
-    const document = await db.collection('object')
-        .findOne({ _id: new ObjectId(id) });
-
-    if (!document) {
-      return res.status(404).json({ error: 'Document not found' });
-    }
-
-    res.json(document);
-  } catch (error) {
-    console.error('Error fetching document by ID:', error);
     res.status(500).json({ error: `Internal server error: ${error.message}` });
   } finally {
     if (client) {
