@@ -45,9 +45,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-createServer({
+const httpsServer = createServer({
   key: privateKey,
   cert: certificate
-}, app).listen(3001);
+}, app);
 
+httpsServer.listen(3001, () => {
+  console.log('HTTPS Server running on port 3001');
+});
 module.exports = app;
