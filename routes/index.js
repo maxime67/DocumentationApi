@@ -13,8 +13,6 @@ async function getMongoClient() {
   try {
     // Add proper options object and error handling
     const client = new MongoClient(mongoUri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       connectTimeoutMS: 5000,
       serverSelectionTimeoutMS: 5000,
     });
