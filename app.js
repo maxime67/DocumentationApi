@@ -10,9 +10,10 @@ const {createServer} = require("node:https");
 
 var app = express();
 
-var privateKey = fs.readFileSync( 'certificates/privkey.pem' );
-var certificate = fs.readFileSync( 'certificates/fullchain.pem' );
-
+// var privateKey = fs.readFileSync( 'certificates/privkey.pem' );
+// var certificate = fs.readFileSync( 'certificates/fullchain.pem' );
+var privateKey =  fs.readFileSync(path.join(__dirname, 'certificates/', 'privkey.pem'));
+var certificate = fs.readFileSync(path.join(__dirname, 'certificates/', 'fullchain.pem'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
