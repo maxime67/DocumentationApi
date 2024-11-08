@@ -49,27 +49,27 @@ router.get('/', async (req, res) => {
         }
     }
 });
-router.get('/allCategories', async (req, res) => {
-    let client;
-    try {
-        client = await getMongoClient();
-        const db = client.db(dbName);
-
-        const documents = await db.collection('documentation_categories')
-            .find()
-            .toArray();
-        res.json(documents);
-    } catch (error) {
-        console.error('Error fetching categories:', error);
-        res.status(500).json({
-            error: `Internal server error: ${error.message}`
-        });
-    } finally {
-        if (client) {
-            await client.close();
-        }
-    }
-});
+// router.get('/allCategories', async (req, res) => {
+//     let client;
+//     try {
+//         client = await getMongoClient();
+//         const db = client.db(dbName);
+//
+//         const documents = await db.collection('documentation_categories')
+//             .find()
+//             .toArray();
+//         res.json(documents);
+//     } catch (error) {
+//         console.error('Error fetching categories:', error);
+//         res.status(500).json({
+//             error: `Internal server error: ${error.message}`
+//         });
+//     } finally {
+//         if (client) {
+//             await client.close();
+//         }
+//     }
+// });
 
 // Get documents by multiple categories
 router.get('/category', async (req, res) => {
