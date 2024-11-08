@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
 const indexRouter = require('./routes/index');
+const fs = require("fs");
+const {createServer} = require("node:https");
+
 
 const app = express();
 
@@ -37,10 +40,17 @@ app.use(function(err, req, res, next) {
     error: req.app.get('env') === 'development' ? err : {}
   });
 });
+let privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pem');
+let certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
 
+
+const httpsServer = createServer({
+  key: privateKey,
+  cert: certificate
+}, app);
 // Start HTTP server
-app.listen(3001, () => {
-  console.log('HTTP Server running on port 3001');
+httpsServer.listen(3000, () => {
+  console.log('HTTPS Server running on port 3000');
 });
 
 module.exports = app;

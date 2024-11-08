@@ -6,6 +6,7 @@ require('dotenv').config();
 
 // MongoDB connection configuration
 const mongoUri = process.env.MONGOURL;
+console.log(process.env.MONGOURL);
 if (!mongoUri) {
     console.error('MONGOURL environment variable is not set');
     process.exit(1); // Exit if the essential config is missing
@@ -16,7 +17,7 @@ if (!mongoUri.startsWith('mongodb://') && !mongoUri.startsWith('mongodb+srv://')
     console.error('Invalid MONGOURL format. Must start with mongodb:// or mongodb+srv://');
     process.exit(1);
 }
-const dbName = 'doc';
+const dbName = 'documentation';
 
 
 // Reusable MongoDB connection function
@@ -130,16 +131,6 @@ router.get('/category', async (req, res) => {
             results: documents
         };
         res.json(response)
-        // // Organize documents by category
-        // documents.forEach(doc => {
-        //     if (results[doc.category]) {
-        //         results[doc.category].push(doc);
-        //     }
-        // });
-        //
-        // // Add metadata to response
-        //
-        // res.json(response);
     } catch (error) {
         console.error('Error fetching documents by categories:', error);
         res.status(500).json({
