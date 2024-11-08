@@ -6,18 +6,8 @@ require('dotenv').config();
 
 // MongoDB connection configuration
 const mongoUri = process.env.MONGOURL;
-console.log(process.env.MONGOURL);
-if (!mongoUri) {
-    console.error('MONGOURL environment variable is not set');
-    process.exit(1); // Exit if the essential config is missing
-}
 
-// Validate MongoDB URI format
-if (!mongoUri.startsWith('mongodb://') && !mongoUri.startsWith('mongodb+srv://')) {
-    console.error('Invalid MONGOURL format. Must start with mongodb:// or mongodb+srv://');
-    process.exit(1);
-}
-const dbName = 'documentation';
+const dbName = 'doc2';
 
 
 // Reusable MongoDB connection function
