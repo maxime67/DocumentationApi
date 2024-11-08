@@ -1,21 +1,12 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors')
-var indexRouter = require('./routes/index');
-const fs = require("fs");
-const {createServer} = require("node:https");
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors')
+const indexRouter = require('./routes/index');
 
-var app = express();
-
-var privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pem');
-var certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+const app = express();
 
 app.use(cors({
   origin: '*'
@@ -39,19 +30,17 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // Send error as JSON instead of rendering
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    message: err.message,
+    error: req.app.get('env') === 'development' ? err : {}
+  });
 });
 
-// Create HTTPS server
-const httpsServer = createServer({
-  key: privateKey,
-  cert: certificate
-}, app);
-
-// Start the server
-httpsServer.listen(3000, () => {
-  console.log('HTTPS Server running on port 3000');
+// Start HTTP server
+app.listen(3001, () => {
+  console.log('HTTP Server running on port 3001');
 });
 
+module.exports = app;
