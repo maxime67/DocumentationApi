@@ -90,7 +90,7 @@ router.get('/category', async (req, res) => {
         let categories = req.query.categories ? req.query.categories.split(',') : [];
 
         // Define valid categories
-        const validCategories = ['Apache', 'NodeJS', 'MongoDB', 'MySQL',"Jenkins",'Docker', 'Kubernetes', 'GitLab','PostgreSQL','Redis', 'Python', 'Java', 'PHP','Nginx'];
+        const validCategories = ['apache', 'nodejs', 'mongodb', 'mysql',"jenkins",'docker', 'kubernetes', 'gitLab','postgresql','redis', 'python', 'java', 'php','nginx'];
 
         // If no categories specified or invalid ones provided, use all valid categories
         if (categories.length === 0) {
