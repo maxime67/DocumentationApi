@@ -6,7 +6,7 @@ require('dotenv').config();
 
 // MongoDB connection configuration
 const mongoUri = process.env.MONGOURL;
-const dbName = 'documentation';
+const dbName = 'doc';
 
 
 // Reusable MongoDB connection function
@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
         client = await getMongoClient();
         const db = client.db(dbName);
 
-        const documents = await db.collection('object')
+        const documents = await db.collection('documentation')
             .find({status: "published"})
             .toArray();
 
@@ -55,7 +55,7 @@ router.get('/allCategories', async (req, res) => {
         client = await getMongoClient();
         const db = client.db(dbName);
 
-        const documents = await db.collection('category')
+        const documents = await db.collection('documentation_categories')
             .find()
             .toArray();
         res.json(documents);
@@ -109,7 +109,7 @@ router.get('/category', async (req, res) => {
         });
 
         // Fetch documents for all requested categories in a single query
-        const documents = await db.collection('object')
+        const documents = await db.collection('documentation')
             .find({
                 category: {$in: categories},
                 status: "published"
