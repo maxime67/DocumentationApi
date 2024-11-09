@@ -29,27 +29,6 @@ async function getMongoClient() {
     }
 }
 
-// Get all documents
-router.get('/', async (req, res) => {
-    let client;
-    try {
-        client = await getMongoClient();
-        const db = client.db(dbName);
-
-        const documents = await db.collection('documentation')
-            .find({status: "published"})
-            .toArray();
-
-        res.json(documents);
-    } catch (error) {
-        console.error('Error fetching all documents:', error);
-        res.status(500).json({error: `Internal server error: ${error.message}`});
-    } finally {
-        if (client) {
-            await client.close();
-        }
-    }
-});
 router.get('/allCategories', async (req, res) => {
     let client;
     try {
