@@ -49,7 +49,7 @@ const httpsServer = createServer({
   cert: certificate
 }, app);
 // Start HTTP server
-httpsServer.listen(3001, () => {
+httpsServer.listen(3000, () => {
   console.log('HTTPS Server running on port 3000');
 });
 
