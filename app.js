@@ -43,14 +43,8 @@ app.use(function(err, req, res, next) {
 let privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pem');
 let certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
 
-
-const httpsServer = createServer({
+createServer({
   key: privateKey,
   cert: certificate
-}, app);
-// Start HTTP server
-httpsServer.listen(3000, () => {
-  console.log('HTTPS Server running on port 3000');
-});
-
+}, app).listen(3000);
 module.exports = app;
