@@ -21,7 +21,6 @@ async function getMongoClient() {
 
         // Connect explicitly
         await client.connect();
-        console.log('Successfully connected to MongoDB');
         return client;
     } catch (error) {
         console.error('MongoDB connection error:', error);
@@ -59,7 +58,7 @@ router.get('/category', async (req, res) => {
         let categories = req.query.categories ? req.query.categories.split(',') : [];
 
         // Define valid categories
-        const validCategories = ['apache', 'nodejs', 'mongodb', 'mysql',"jenkins",'docker', 'kubernetes', 'gitLab','postgresql','redis', 'python', 'java', 'php','nginx'];
+        const validCategories = ['vuejs','apache', 'nodejs', 'mongodb', 'mysql',"jenkins",'docker', 'kubernetes', 'gitLab','postgresql','redis', 'python', 'java', 'php','nginx', 'tomcat'];
 
         // If no categories specified or invalid ones provided, use all valid categories
         if (categories.length === 0) {
