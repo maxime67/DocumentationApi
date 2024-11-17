@@ -99,36 +99,4 @@ router.get('/category', async (req, res) => {
     }
 });
 
-// Admin route to add or update categories
-router.post('/admin/categories', async (req, res) => {
-    let client;
-    try {
-        const { name, subcategories } = req.body;
-
-        if (!name || !subcategories || !Array.isArray(subcategories)) {
-            return res.status(400).json({ error: 'Invalid category data' });
-        }
-
-        client = await getMongoClient();
-        const db = client.db(dbName);
-
-        await db.collection('categories').updateOne(
-            { name: name },
-            { $set: { name, subcategories } },
-            { upsert: true }
-        );
-
-        res.json({ message: 'Category updated successfully' });
-    } catch (error) {
-        console.error('Error updating categories:', error);
-        res.status(500).json({
-            error: `Internal server error: ${error.message}`
-        });
-    } finally {
-        if (client) {
-            await client.close();
-        }
-    }
-});
-
 module.exports = router;
