@@ -40,8 +40,8 @@ app.use(function(err, req, res, next) {
     error: req.app.get('env') === 'development' ? err : {}
   });
 });
-let privateKey = fs.readFileSync('/root/DocumentationApi/certificates/privkey.pem');
-let certificate = fs.readFileSync('/root/DocumentationApi/certificates/fullchain.pem');
+let privateKey = fs.readFileSync('/root/nodejs-app/certificates/privkey.pem');
+let certificate = fs.readFileSync('/root/nodejs-app/certificates/fullchain.pem');
 
 createServer({
   key: privateKey,

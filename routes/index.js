@@ -19,8 +19,9 @@ async function getMongoClient() {
         throw new Error(`MongoDB connection failed: ${error.message}`);
     }
 }
-
+//
 // Get all categories with their subcategories
+//
 router.get('/categories', async (req, res) => {
     let client;
     try {
@@ -51,20 +52,16 @@ router.get('/category', async (req, res) => {
         client = await getMongoClient();
         const db = client.db(dbName);
 
-        // Get all valid subcategories from database
         const categoriesData = await db.collection('categories').find().toArray();
         const validSubcategories = categoriesData.reduce((acc, category) => {
             return [...acc, ...category.subcategories.map(sub => sub.toLowerCase())];
         }, []);
 
-        // Get subcategories from query parameter
         let subcategories = req.query.categories ? req.query.categories.split(',') : [];
 
-        // If no subcategories specified or invalid ones provided, use all valid subcategories
         if (subcategories.length === 0) {
             subcategories = validSubcategories;
         } else {
-            // Filter out any invalid subcategories
             subcategories = subcategories.filter(cat => validSubcategories.includes(cat));
 
             if (subcategories.length === 0) {
