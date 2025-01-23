@@ -1,43 +1,48 @@
 const express = require('express');
 const router = express.Router();
-const {MongoClient, ObjectId} = require('mongodb');
+const { MongoClient, ObjectId} = require('mongodb');
+const { body,validationResult } = require('express-validator');
+
 require('dotenv').config();
 
+// MongoDB connection configuration
 const mongoUri = process.env.MONGOURL;
-const dbName = 'doc2';
+const dbName = 'documentation';
 
+// Reusable MongoDB connection function
 async function getMongoClient() {
     try {
+        // Add proper options object and error handling
         const client = new MongoClient(mongoUri, {
             connectTimeoutMS: 5000,
             serverSelectionTimeoutMS: 5000,
         });
+
+        // Connect explicitly
         await client.connect();
+        console.log('Successfully connected to MongoDB');
         return client;
     } catch (error) {
         console.error('MongoDB connection error:', error);
         throw new Error(`MongoDB connection failed: ${error.message}`);
     }
 }
-//
-// Get all categories with their subcategories
-//
-router.get('/categories', async (req, res) => {
+
+// Get all documents
+router.get('/', async (req, res) => {
     let client;
     try {
         client = await getMongoClient();
         const db = client.db(dbName);
 
-        const categories = await db.collection('categories')
-            .find()
+        const documents = await db.collection('object')
+            .find({status : "published"})
             .toArray();
 
-        res.json(categories);
+        res.json(documents);
     } catch (error) {
-        console.error('Error fetching categories:', error);
-        res.status(500).json({
-            error: `Internal server error: ${error.message}`
-        });
+        console.error('Error fetching all documents:', error);
+        res.status(500).json({ error: `Internal server error: ${error.message}` });
     } finally {
         if (client) {
             await client.close();
@@ -45,50 +50,29 @@ router.get('/categories', async (req, res) => {
     }
 });
 
-// Get documents by multiple subcategories
-router.get('/category', async (req, res) => {
+// Get documents by category
+router.get('/category/:category',async (req, res) => {
     let client;
     try {
+        const { category } = req.params;
+
+        // Validate category
+        const validCategories = ['apache', 'nodejs', 'mongodb', 'mysql'];
+        if (!validCategories.includes(category)) {
+            return res.status(400).json({ error: 'Invalid category. Must be one of: API, Tutorial, Guide, Reference, Other' });
+        }
+
         client = await getMongoClient();
         const db = client.db(dbName);
 
-        const categoriesData = await db.collection('categories').find().toArray();
-        const validSubcategories = categoriesData.reduce((acc, category) => {
-            return [...acc, ...category.subcategories.map(sub => sub.toLowerCase())];
-        }, []);
-
-        let subcategories = req.query.categories ? req.query.categories.split(',') : [];
-
-        if (subcategories.length === 0) {
-            subcategories = validSubcategories;
-        } else {
-            subcategories = subcategories.filter(cat => validSubcategories.includes(cat));
-
-            if (subcategories.length === 0) {
-                return res.status(400).json({
-                    error: `Invalid categories. Must be one or more of: ${validSubcategories.join(', ')}`,
-                    validSubcategories: validSubcategories
-                });
-            }
-        }
-
-        const documents = await db.collection('documentation')
-            .find({
-                category: {$in: subcategories},
-                status: "published"
-            })
+        const documents = await db.collection('object')
+            .find({ category: category, status: "published" })
             .toArray();
 
-        const response = {
-            totalDocuments: documents.length,
-            results: documents
-        };
-        res.json(response);
+        res.json(documents);
     } catch (error) {
-        console.error('Error fetching documents by categories:', error);
-        res.status(500).json({
-            error: `Internal server error: ${error.message}`
-        });
+        console.error('Error fetching documents by category:', error);
+        res.status(500).json({ error: `Internal server error: ${error.message}` });
     } finally {
         if (client) {
             await client.close();
