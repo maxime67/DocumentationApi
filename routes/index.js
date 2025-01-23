@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { MongoClient, ObjectId} = require('mongodb');
-const { body,validationResult } = require('express-validator');
+const { MongoClient} = require('mongodb');
 
 require('dotenv').config();
 
