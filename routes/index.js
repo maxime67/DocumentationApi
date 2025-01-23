@@ -49,6 +49,29 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/categories', async (req, res) => {
+    let client;
+    try {
+        client = await getMongoClient();
+        const db = client.db(dbName);
+
+        const categories = await db.collection('categories')
+            .find()
+            .toArray();
+
+        res.json(categories);
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        res.status(500).json({
+            error: `Internal server error: ${error.message}`
+        });
+    } finally {
+        if (client) {
+            await client.close();
+        }
+    }
+});
+
 // Get documents by category
 router.get('/category/:category',async (req, res) => {
     let client;
